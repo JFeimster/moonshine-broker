@@ -20,11 +20,11 @@ export default function Button({
 }: Props) {
   const styles =
     variant === "primary"
-      ? "bg-zinc-950 text-white hover:bg-zinc-800"
-      : "bg-white text-zinc-950 ring-1 ring-zinc-200 hover:bg-zinc-50";
+      ? "border-2 border-black bg-[#f5d90a] text-black shadow-[4px_4px_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_#000]"
+      : "border-2 border-black bg-[#f2eedf] text-black shadow-[4px_4px_0_#000] hover:bg-white";
 
   const base =
-    "inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold shadow-soft transition";
+    "inline-flex items-center justify-center px-5 py-3 text-xs font-black uppercase tracking-[0.08em] no-underline transition";
 
   if (href) {
     return (
@@ -35,11 +35,7 @@ export default function Button({
   }
 
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      className={cn(base, styles, className)}
-    >
+    <button type={type} onClick={onClick} className={cn(base, styles, className)}>
       {children}
     </button>
   );
