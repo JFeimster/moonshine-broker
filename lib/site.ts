@@ -5,7 +5,7 @@ export const site = {
   description:
     "Build a fintech-enabled funding business with products, technology, training, lead attribution, and operating infrastructure already in place.",
   applyUrl:
-    "https://tally.so/r/rjM6do?utm_source=agency&utm_medium=website&utm_campaign=agency_property&source=agency&campaign=agency_property",
+    "/apply?utm_source=agency&utm_medium=website&utm_campaign=agency_property&source=agency&campaign=agency_property",
   brokersUrl: "https://www.distilledfunding.com/brokers",
   partnerCommandUrl: "https://app.distilledfunding.com",
   toolsUrl: "https://tools.distilledfunding.com",
