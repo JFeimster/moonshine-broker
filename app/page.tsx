@@ -1,206 +1,174 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Section from "@/components/Section";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
-import LeadForm from "@/components/LeadForm";
-import { AccordionItem } from "@/components/Accordion";
+import { site } from "@/lib/site";
+
+const operatingLoop = [
+  ["01", "Find businesses that need capital"],
+  ["02", "Help them access funding options"],
+  ["03", "Get paid when customer production occurs"],
+  ["04", "Build repeat + referral relationships"],
+  ["05", "Scale into a real agency"],
+];
+
+const system = [
+  ["Capital Page", "Your public client-facing funding identity and lead-capture surface."],
+  ["Partner Command", "The authenticated operating desk for pipeline, growth, learning, production, and team activity."],
+  ["Product Desk", "A clearer way to navigate funding solutions instead of pretending one product fits every borrower."],
+  ["Growth Kit", "Tracking links, QR distribution, campaigns, scripts, marketing assets, and practical outreach tools."],
+  ["Training + Sprint", "Launch guidance, scripts, production planning, activity tracking, and a first-30-days operating rhythm."],
+  ["Agency Path", "Move from personal production to consistent producer, team builder, operator, and leader."],
+];
+
+const fits = [
+  "Sales professionals who can turn conversations into follow-up",
+  "Entrepreneurs who want a low-overhead service business",
+  "CPAs, consultants, lenders, insurance, real estate, and business professionals",
+  "Part-time builders willing to work a consistent activity plan",
+  "Existing funding brokers who need better infrastructure",
+  "Future team builders who want to learn a repeatable operating system",
+];
 
 export default function Page() {
   return (
-    <div>
+    <>
       <Header />
-
-      {/* HERO */}
-      <section className="py-16 sm:py-20">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl">
-                Build a Funding Agency. Not a “Side Hustle.”
-              </h1>
-              <p className="mt-5 text-lg leading-8 text-zinc-700">
-                Join our broker team and get the scripts, systems, and support to connect real business owners with real
-                capital—while you stack commissions like a professional.
-              </p>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href="#kit" variant="primary">Get the Broker Starter Kit</Button>
-                <Button href="/book" variant="secondary">Book a 15-Min Fit Check</Button>
+      <main>
+        <section className="border-b-2 border-black py-14 sm:py-20 lg:py-24">
+          <Container>
+            <div className="grid gap-10 lg:grid-cols-[1.3fr_.7fr] lg:items-end">
+              <div>
+                <div className="command-label">Distilled Funding / Agency</div>
+                <h1 className="display-type mt-5 max-w-6xl text-7xl sm:text-8xl lg:text-[8.5rem]">
+                  Build a <span className="marker">funding business.</span>
+                </h1>
+                <p className="mt-7 max-w-3xl text-xl font-bold leading-8 sm:text-2xl">
+                  The products. The technology. The training. The operating infrastructure. Already built.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Button href={site.applyUrl}>Start Your Funding Agency</Button>
+                  <Button href="/how-it-works" variant="secondary">See How It Works</Button>
+                </div>
               </div>
 
-              <p className="mt-4 text-sm text-zinc-500">
-                No office. No license required for many products. Real work required. (If you want “passive income,” this isn’t it.)
+              <aside className="brutal-card-dark p-7">
+                <div className="command-label text-[#f5d90a]">The deal</div>
+                <p className="mt-5 text-2xl font-black uppercase leading-tight">
+                  You bring relationships, prospecting, conversations, client acquisition, and follow-up.
+                </p>
+                <div className="my-6 border-t border-zinc-700" />
+                <p className="text-sm leading-6 text-zinc-300">
+                  The ecosystem supplies products, provider access, submission infrastructure, a public funding page, lead attribution, Partner Command, tools, training, scripts, marketing assets, and agency-building systems.
+                </p>
+              </aside>
+            </div>
+          </Container>
+        </section>
+
+        <section className="border-b-2 border-black bg-[#f5d90a] py-10">
+          <Container>
+            <div className="grid gap-0 border-2 border-black bg-[#f2eedf] lg:grid-cols-5">
+              {operatingLoop.map(([number, label], index) => (
+                <div key={number} className={`p-5 ${index < operatingLoop.length - 1 ? "border-b-2 border-black lg:border-b-0 lg:border-r-2" : ""}`}>
+                  <div className="command-label">{number}</div>
+                  <div className="mt-3 text-lg font-black uppercase leading-tight">{label}</div>
+                </div>
+              ))}
+            </div>
+          </Container>
+        </section>
+
+        <section className="py-16 sm:py-24">
+          <Container>
+            <div className="max-w-4xl">
+              <div className="command-label">The business model</div>
+              <h2 className="display-type mt-4 text-6xl sm:text-8xl">You do not need to become the bank.</h2>
+              <p className="mt-7 text-lg leading-8">
+                Your job is business development: identify a capital need, start the conversation, connect the client to the right funding process, keep communication moving, and build the relationship after funding. Provider and platform specialists handle the parts that should not depend on a brand-new agent becoming an underwriter overnight.
               </p>
             </div>
 
-            <div id="kit">
-              <LeadForm />
+            <div className="mt-12 grid gap-6 md:grid-cols-3">
+              {[['PROSPECT', 'Talk to business owners and referral partners.'], ['ROUTE', 'Move a real funding need into the appropriate application and provider path.'], ['RELATIONSHIP', 'Follow up, serve the client, and create repeat + referral business.']].map(([t,d]) => (
+                <div className="brutal-card p-7" key={t}>
+                  <div className="command-label">{t}</div>
+                  <p className="mt-4 text-xl font-black uppercase leading-tight">{d}</p>
+                </div>
+              ))}
             </div>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
 
-      {/* WHO THIS IS FOR */}
-      <Section id="for" title="This is for operators.">
-        <p className="max-w-3xl text-zinc-700">
-          You don’t need a finance degree. You need follow-through, curiosity, and the ability to talk to business owners like a human.
-        </p>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-3xl bg-zinc-50 p-6 ring-1 ring-zinc-200">
-            <h3 className="text-lg font-bold">For</h3>
-            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-zinc-700">
-              <li>Sales pros, consultants, freelancers, and networkers who want a <b>real</b> commission skill</li>
-              <li>Entrepreneurs who can commit to <b>daily outreach</b> and consistent follow-up</li>
-              <li>People who’d rather build a pipeline than chase “motivation”</li>
-              <li>Anyone who wants to become <b>the funding person</b> in their town or niche</li>
-            </ul>
-          </div>
-
-          <div className="rounded-3xl bg-white p-6 ring-1 ring-zinc-200">
-            <h3 className="text-lg font-bold">Not for</h3>
-            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-zinc-700">
-              <li>“I’m just browsing opportunities”</li>
-              <li>“I want passive income”</li>
-              <li>“I’ll start once I feel ready”</li>
-              <li>People allergic to tracking, follow-up, and basic professionalism</li>
-            </ul>
-          </div>
-        </div>
-      </Section>
-
-      {/* PROBLEM */}
-      <Section title="Most affiliate teams fail you.">
-        <div className="max-w-3xl space-y-4 text-zinc-700">
-          <p>
-            They hand you a link and a dream. No process. No standards. No feedback loop. Then they blame <i>you</i> when nothing closes.
-          </p>
-          <p>
-            We do it the opposite way: systems first, skill second, commissions third (but steadily).
-          </p>
-        </div>
-      </Section>
-
-      {/* PROMISE */}
-      <Section title="You get an Operating System—not “training videos.”">
-        <p className="max-w-3xl text-zinc-700">Everything you need to start taking action immediately.</p>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
-          {[
-            ["Broker Scripts Library", "Cold outreach, warm follow-up, objection handling, and “book the call” language that doesn’t sound desperate."],
-            ["Deal Triage Scorecard", "Know if a business is fundable in minutes—so you don’t waste your life."],
-            ["Pipeline + Follow-Up System", "A simple CRM structure and daily routine that turns “maybe” into money."],
-            ["Territory Commander Playbook", "Zip codes + niches + a 100-business starter ledger so you always know who to contact next."],
-            ["Live Support + Deal Reviews", "Bring real deals. Get real feedback. Improve fast."],
-          ].map(([t, d]) => (
-            <div key={t} className="rounded-3xl bg-white p-6 ring-1 ring-zinc-200 shadow-soft">
-              <h3 className="font-bold">{t}</h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-700">{d}</p>
+        <section className="border-y-2 border-black bg-black py-16 text-[#f2eedf] sm:py-24">
+          <Container>
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="command-label text-[#f5d90a]">Your operating system</div>
+                <h2 className="display-type mt-4 max-w-5xl text-6xl sm:text-8xl">Infrastructure beats improvisation.</h2>
+              </div>
+              <Button href="/system" variant="secondary">See the System</Button>
             </div>
-          ))}
-        </div>
-      </Section>
 
-      {/* HOW IT WORKS */}
-      <Section id="how" title="Start in 3 steps.">
-        <div className="grid gap-4 lg:grid-cols-3">
-          {[
-            ["Step 1: Get the Broker Starter Kit", "Download the scripts + tracker + territory template."],
-            ["Step 2: Book a 15-Minute Fit Check", "We’ll confirm you’re a match and map your first 7 days."],
-            ["Step 3: Run the 7-Day Sprint", "Daily outreach, daily tracking, fast feedback. You’ll know quickly if this is your lane."],
-          ].map(([t, d]) => (
-            <div key={t} className="rounded-3xl bg-zinc-50 p-6 ring-1 ring-zinc-200">
-              <h3 className="font-bold">{t}</h3>
-              <p className="mt-2 text-sm text-zinc-700">{d}</p>
+            <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {system.map(([title, body]) => (
+                <article key={title} className="border-2 border-[#f2eedf] p-6">
+                  <h3 className="text-xl font-black uppercase">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-zinc-300">{body}</p>
+                </article>
+              ))}
             </div>
-          ))}
-        </div>
+          </Container>
+        </section>
 
-        <div className="mt-8">
-          <Button href="#kit" variant="primary">Get the Starter Kit</Button>
-        </div>
-      </Section>
+        <section className="py-16 sm:py-24">
+          <Container>
+            <div className="grid gap-10 lg:grid-cols-2">
+              <div>
+                <div className="command-label">First 30 days</div>
+                <h2 className="display-type mt-4 text-6xl sm:text-8xl">Launch before you overthink it.</h2>
+                <div className="mt-8 grid gap-3">
+                  {[
+                    ["Day 1", "Identity + system"],
+                    ["Week 1", "Learn the business"],
+                    ["Week 2", "Start conversations"],
+                    ["Week 3", "Build pipeline"],
+                    ["Week 4", "Create consistency"],
+                  ].map(([when, action]) => (
+                    <div className="flex items-center justify-between border-t-2 border-black py-4" key={when}>
+                      <span className="command-label">{when}</span>
+                      <span className="text-xl font-black uppercase">{action}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-7"><Button href="/start" variant="secondary">See the 30-Day Path</Button></div>
+              </div>
 
-      {/* STANDARDS */}
-      <Section id="standards" title="What we expect (so you actually win).">
-        <div className="max-w-3xl space-y-5 text-zinc-700">
-          <p>This isn’t complicated. It’s consistent.</p>
-          <ul className="list-disc space-y-2 pl-5 text-sm">
-            <li><b>10 outreaches/day</b> (or a weekly equivalent if you batch)</li>
-            <li>Track your pipeline (if it’s in your head, it’s fiction)</li>
-            <li>Follow up like a professional (deals close after “no”)</li>
-            <li>Learn the basics of fundability (we give you the scorecard)</li>
-            <li>Bring questions, bring deals, bring honesty</li>
-          </ul>
-
-          <div className="rounded-3xl bg-zinc-950 p-6 text-white shadow-soft">
-            <p className="text-sm leading-6">
-              If you do the work, you’ll get support. If you don’t, you’ll get silence. That’s not harsh—it’s respectful.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      {/* CREDIBILITY (Option A) */}
-      <Section title="Real businesses need capital every day.">
-        <div className="max-w-3xl text-zinc-700">
-          <p>
-            Most small businesses experience cash flow crunches, growth opportunities, or emergency expenses. They don’t need motivation—they need options.
-          </p>
-
-          <ul className="mt-5 list-disc space-y-2 pl-5 text-sm">
-            <li>Multi-product approach (not one-trick pony)</li>
-            <li>Process-driven qualification</li>
-            <li>Focus on speed + clarity + ethics</li>
-          </ul>
-        </div>
-      </Section>
-
-      {/* FAQ */}
-      <Section id="faq" title="Questions everyone asks (and pretends they didn’t).">
-        <div className="grid gap-3">
-          <AccordionItem
-            q="Do I need a license?"
-            a="Often no, depending on products and how you operate. We’ll guide you on best practices and staying clean."
-          />
-          <AccordionItem
-            q="Is this part-time friendly?"
-            a="Yes—if you’re consistent. The work can be batched. The follow-up can’t be “whenever.”"
-          />
-          <AccordionItem
-            q="What if I don’t have a network?"
-            a="Then you build one. We give you a territory plan + lead ledger template so you’re never guessing."
-          />
-          <AccordionItem
-            q="How do I get paid?"
-            a="Commissions vary by product and deal. We’ll show you the realistic timeline and what affects payout speed."
-          />
-          <AccordionItem
-            q="What makes someone fail?"
-            a="No outreach, no follow-up, no tracking. The “I’m learning” phase becomes a lifestyle."
-          />
-        </div>
-      </Section>
-
-      {/* FINAL CTA */}
-      <section className="py-16">
-        <Container>
-          <div className="rounded-3xl bg-zinc-50 p-8 ring-1 ring-zinc-200">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Ready to build your pipeline?</h2>
-            <p className="mt-3 max-w-2xl text-zinc-700">
-              Download the Broker Starter Kit, run the first week, and you’ll know exactly where you stand.
-            </p>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Button href="#kit" variant="primary">Get the Broker Starter Kit</Button>
-              <Button href="/book" variant="secondary">Book a 15-Min Fit Check</Button>
+              <div className="brutal-card p-7 sm:p-9">
+                <div className="command-label">Who this fits</div>
+                <h3 className="mt-4 text-4xl font-black uppercase tracking-[-.04em]">People willing to build a pipeline, not collect motivational screenshots.</h3>
+                <ul className="mt-7 grid gap-4 text-sm font-semibold">
+                  {fits.map((fit) => <li key={fit} className="border-t border-black pt-4">→ {fit}</li>)}
+                </ul>
+              </div>
             </div>
-            <p className="mt-4 text-sm text-zinc-600">We’re building a team of operators. If that’s you, welcome.</p>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
 
+        <section className="border-t-2 border-black bg-[#f5d90a] py-16">
+          <Container>
+            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div>
+                <div className="command-label">Start</div>
+                <h2 className="display-type mt-3 max-w-5xl text-6xl sm:text-8xl">Your agency does not need another logo. It needs its first conversation.</h2>
+                <p className="mt-6 max-w-2xl text-lg font-semibold">Join, create your Funding Agent record, then move into profile provisioning and the launch workflow.</p>
+              </div>
+              <Button href={site.applyUrl} variant="secondary">Start Your Funding Agency</Button>
+            </div>
+          </Container>
+        </section>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
