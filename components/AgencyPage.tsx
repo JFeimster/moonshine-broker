@@ -4,7 +4,7 @@ import Container from "@/components/Container";
 import Button from "@/components/Button";
 import type { AgencyPageContent } from "@/content/pages/types";
 
-export default function AgencyPage({ content }: { content: AgencyPageContent }) {
+export default function AgencyPage({ content, children }: { content: AgencyPageContent; children?: React.ReactNode }) {
   const isFaq = content.title === "Frequently Asked Questions";
   return <>
     <Header />
@@ -29,6 +29,7 @@ export default function AgencyPage({ content }: { content: AgencyPageContent }) 
           </div>
         </Container>
       </section>
+      {children}
       <section className="py-10 sm:py-14">
         <Container>
           <div className="mb-5 flex items-end justify-between border-b-2 border-black pb-3">

@@ -5,9 +5,11 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { navigation, primaryNavigationCta } from "@/content/navigation";
+import { useApplyHref } from "@/components/AttributionProvider";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const applyHref = useApplyHref(primaryNavigationCta.href);
   return (
     <header className="sticky top-0 z-50 border-b-2 border-black bg-[#f2eedf]">
       <Container>
@@ -30,7 +32,7 @@ export default function Header() {
         </div>
         <nav id="mobile-navigation" aria-label="Mobile navigation" className={`${menuOpen ? "grid" : "hidden"} border-t-2 border-black py-2 sm:grid-cols-2 2xl:hidden`}>
           {navigation.map(({ label, href }) => <a key={href} href={href} onClick={() => setMenuOpen(false)} className="border-b border-black/20 py-3 text-xs font-black uppercase tracking-wider no-underline hover:bg-[#f5d90a]">{label}<span className="float-right pr-3" aria-hidden="true">↗</span></a>)}
-          <a href={primaryNavigationCta.href} onClick={() => setMenuOpen(false)} className="mt-2 border-2 border-black bg-[#f5d90a] px-3 py-3 text-xs font-black uppercase sm:col-span-2">{primaryNavigationCta.label} <span aria-hidden="true">↗</span></a>
+          <a href={applyHref} onClick={() => setMenuOpen(false)} className="mt-2 border-2 border-black bg-[#f5d90a] px-3 py-3 text-xs font-black uppercase sm:col-span-2">{primaryNavigationCta.label} <span aria-hidden="true">↗</span></a>
         </nav>
       </Container>
     </header>

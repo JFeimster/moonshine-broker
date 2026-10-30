@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useApplyHref } from "@/components/AttributionProvider";
 
 type Props = {
   href?: string;
@@ -18,6 +21,7 @@ export default function Button({
   className,
   type = "button",
 }: Props) {
+  const linkedHref = useApplyHref(href || "");
   const styles =
     variant === "primary"
       ? "border-2 border-black bg-[#f5d90a] text-black shadow-[4px_4px_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_#000]"
@@ -28,7 +32,7 @@ export default function Button({
 
   if (href) {
     return (
-      <Link href={href} className={cn(base, styles, className)}>
+      <Link href={linkedHref} className={cn(base, styles, className)}>
         {children}
       </Link>
     );

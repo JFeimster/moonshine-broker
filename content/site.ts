@@ -28,8 +28,8 @@ export const site = {
   name: "Moonshine Capital",
   productName: "Funding Agency",
   shortName: "Moonshine Capital",
-  tagline: "Build a funding business. The infrastructure is already built.",
+  tagline: "Understand the role. Build a practical funding practice.",
   description:
-    "Build an independent funding practice with client-facing pages, Partner Command, product pathways, training, and business development infrastructure.",
+    "Explore an independent funding-agent opportunity, practical client-development guidance, and the planned operating infrastructure.",
   url: "https://moonshine-broker.vercel.app",
 } as const;

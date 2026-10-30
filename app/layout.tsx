@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { site } from "@/content/site";
+import { AttributionProvider } from "@/components/AttributionProvider";
 
 export const metadata: Metadata = {
   title: { default: "Build a Funding Business | Moonshine Capital", template: "%s | Moonshine Capital" },
@@ -18,5 +19,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en"><body><AttributionProvider>{children}</AttributionProvider></body></html>;
 }

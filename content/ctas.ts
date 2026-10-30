@@ -3,7 +3,8 @@ import { destinations } from "./site";
 export const ctas = {
   apply: { label: "Start Your Funding Agency", href: "/apply" },
   applyShort: { label: "Start Your Agency", href: "/apply" },
-  howItWorks: { label: "See How It Works", href: "/how-it-works" },
+  howItWorks: { label: "See How the Agency Works", href: "/how-it-works" },
+  readiness: { label: "Check My Agency Readiness", href: "/start#agency-readiness" },
   system: { label: "Explore the System", href: "/system" },
   partnerCommand: { label: "Explore Partner Command", href: destinations.partnerCommand.current },
   products: { label: "Explore Funding Paths", href: "/products" },

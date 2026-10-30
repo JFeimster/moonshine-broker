@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
-import EconomicsPlanner from "@/components/EconomicsPlanner";
 import { ctas } from "@/content/ctas";
 import { home } from "@/content/pages/home";
 import { fundingFamilies, fundingCaveat } from "@/content/products";
@@ -29,8 +28,8 @@ export default function HomePage() {
               <p className="mt-5 max-w-xl text-lg font-black uppercase leading-snug sm:text-2xl">{home.hero.subhead}</p>
               <p className="mt-4 max-w-xl text-sm leading-6 text-zinc-300 sm:text-base">{home.hero.body}</p>
               <div className="mt-7 flex flex-wrap gap-3">
-                <Button href={ctas.apply.href}>{ctas.apply.label}</Button>
-                <Button href={ctas.howItWorks.href} variant="secondary">{ctas.howItWorks.label}</Button>
+                <Button href={ctas.howItWorks.href}>{ctas.howItWorks.label}</Button>
+                <Button href={ctas.readiness.href} variant="secondary">{ctas.readiness.label}</Button>
               </div>
             </div>
             <div className="hero-console border-y-2 border-[#f2eedf] py-5 lg:ml-6 lg:border-2 lg:p-6">
@@ -100,7 +99,7 @@ export default function HomePage() {
           <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
             <div><div className="command-label">{home.command.eyebrow}</div><h2 className="display-type mt-4 text-5xl sm:text-7xl">{home.command.title}</h2><p className="mt-5 max-w-lg text-sm leading-7">{home.command.body}</p><a href={ctas.partnerCommand.href} className="mt-6 inline-block border-b-2 border-black pb-1 text-xs font-black uppercase">{ctas.partnerCommand.label} ↗</a></div>
             <div className="command-showcase border-2 border-black bg-[#f2eedf] shadow-[7px_7px_0_#f5d90a]">
-              <div className="flex items-center justify-between border-b-2 border-black bg-[#f5d90a] px-4 py-3"><span className="command-label">Partner Command / Workspace</span><span className="flex gap-1.5" aria-hidden="true"><i className="h-2.5 w-2.5 rounded-full border border-black"/><i className="h-2.5 w-2.5 rounded-full border border-black"/><i className="h-2.5 w-2.5 rounded-full border border-black"/></span></div>
+              <div className="flex items-center justify-between border-b-2 border-black bg-[#f5d90a] px-4 py-3"><span className="command-label">Partner Command / Planned concept</span><span className="flex gap-1.5" aria-hidden="true"><i className="h-2.5 w-2.5 rounded-full border border-black"/><i className="h-2.5 w-2.5 rounded-full border border-black"/><i className="h-2.5 w-2.5 rounded-full border border-black"/></span></div>
               <div className="grid sm:grid-cols-[8rem_1fr]">
                 <div className="hidden border-r-2 border-black bg-black p-4 text-[#f2eedf] sm:block"><div className="command-label text-[#f5d90a]">Workspace</div><div className="mt-5 grid gap-4 text-[10px] font-bold uppercase">{home.command.navItems.map((item) => <span key={item}>{item}</span>)}</div></div>
                 <div className="grid divide-y-2 divide-black">
@@ -128,10 +127,11 @@ export default function HomePage() {
           <div className="grid gap-7 lg:grid-cols-[.65fr_1.35fr]">
             <div><div className="command-label">{home.solutions.eyebrow}</div><h2 className="display-type mt-4 text-5xl sm:text-7xl">{home.solutions.title}</h2><p className="mt-5 max-w-md text-sm leading-7">{home.solutions.body}</p></div>
             <div className="grid grid-cols-1 border-l-2 border-t-2 border-black sm:grid-cols-2 lg:grid-cols-3">
-              {fundingFamilies.map((product, index) => <a key={product.name} href="/products" className="group min-h-28 border-b-2 border-r-2 border-black p-4 no-underline hover:bg-[#f5d90a]"><div className="flex justify-between gap-3"><span className="command-label">Path / 0{index + 1}</span><span aria-hidden="true" className="transition-transform group-hover:translate-x-1">↗</span></div><h3 className="mt-5 text-sm font-black uppercase">{product.name}</h3></a>)}
+              {fundingFamilies.map((product, index) => <div key={product.name} className="min-h-28 border-b-2 border-r-2 border-black p-4"><div className="command-label">Path / 0{index + 1}</div><h3 className="mt-5 text-sm font-black uppercase">{product.name}</h3></div>)}
             </div>
           </div>
           <p className="mt-4 text-xs leading-5 text-zinc-600">{fundingCaveat}</p>
+          <a href="/products" className="mt-5 inline-block border-b-2 border-black pb-1 text-xs font-black uppercase">Explore the product desk ↗</a>
         </Container>
       </section>
 
@@ -146,9 +146,7 @@ export default function HomePage() {
 
       <section className="border-b-2 border-black bg-[#f5d90a] py-12 sm:py-16">
         <Container>
-          <div className="mb-8 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end"><div><div className="command-label">{home.economics.eyebrow}</div><h2 className="display-type mt-3 text-5xl sm:text-7xl">{home.economics.title}</h2></div><span className="border-2 border-black px-3 py-2 command-label">{home.economics.toolLabel}</span></div>
-          <EconomicsPlanner />
-          <p className="mt-6 max-w-4xl border-t border-black/50 pt-4 text-xs leading-5">{home.economics.caveat} See the <a className="font-black underline" href="/compensation">current compensation explanation</a> and governing plan.</p>
+          <div className="grid gap-7 lg:grid-cols-[.75fr_1.25fr]"><div><div className="command-label">{home.economics.eyebrow}</div><h2 className="display-type mt-3 text-5xl sm:text-7xl">{home.economics.title}</h2></div><div className="border-t-2 border-black pt-5"><p className="max-w-2xl text-sm leading-7">{home.economics.caveat}</p><a className="mt-5 inline-block border-b-2 border-black pb-1 text-xs font-black uppercase" href="/compensation">Understand compensation ↗</a></div></div>
         </Container>
       </section>
 
@@ -156,7 +154,7 @@ export default function HomePage() {
         <Container>
           <div className="grid gap-9 lg:grid-cols-[1fr_auto] lg:items-end">
             <div><div className="command-label text-[#f5d90a]">{home.final.eyebrow}</div><h2 className="display-type mt-4 max-w-5xl text-5xl leading-[.9] sm:text-7xl lg:text-8xl">{home.final.title}</h2><p className="mt-6 max-w-2xl text-sm leading-7 text-zinc-300">{home.final.body}</p></div>
-            <Button href={ctas.apply.href}>{ctas.apply.label}</Button>
+            <div className="flex flex-wrap gap-3"><Button href={ctas.readiness.href} variant="secondary">{ctas.readiness.label}</Button><Button href={ctas.apply.href}>{ctas.apply.label}</Button></div>
           </div>
         </Container>
       </section>

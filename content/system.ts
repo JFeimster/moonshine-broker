@@ -9,11 +9,11 @@ export type SystemModule = {
 
 export const systemModules: SystemModule[] = [
   { number: "01", name: "Funding Page", summary: "Partner-attributed client pages are part of the planned Capital layer and are still in development.", destination: destinations.capitalPages.current },
-  { number: "02", name: "Partner Command", summary: "An authenticated workspace for pipeline, follow-up, growth, production, learning, and team activity. Explore its public overview while app access is in development.", destination: destinations.partnerCommand.current },
+  { number: "02", name: "Partner Command", summary: "Planned authenticated workspace for pipeline, follow-up, growth, production, learning, and team activity. App access is in development.", destination: destinations.partnerCommand.current },
   { number: "03", name: "Product Desk", summary: "A guided way to understand funding solution families and move a client into the appropriate process.", destination: "/products" },
-  { number: "04", name: "Growth Engine", summary: "Tracking links, QR distribution, campaign assets, scripts, and outreach tools to support conversations." },
-  { number: "05", name: "Training", summary: "Getting-started guidance, product education, scripts, and practical operating routines." },
-  { number: "06", name: "Production Desk", summary: "Game Plans and activity tracking help agents plan, review, and adjust their business development work." },
+  { number: "04", name: "Growth Engine", summary: "Planned tracking links, campaign assets, scripts, and outreach tools to support conversations." },
+  { number: "05", name: "Training", summary: "Planned getting-started guidance, product education, scripts, and practical operating routines." },
+  { number: "06", name: "Production Desk", summary: "Planned Game Plans and activity tracking for reviewing business-development work." },
   { number: "07", name: "Build", summary: "A path from personal production toward agent duplication, team support, and leadership.", destination: "/build" },
 ];
 
@@ -24,11 +24,11 @@ export const commandPrompts = [
 ] as const;
 
 export const commandModules = [
-  { name: "Capital", summary: "Public funding-page infrastructure and attribution." },
-  { name: "Growth", summary: "Campaigns, links, scripts, and distribution." },
-  { name: "Build", summary: "Launch paths and agency development." },
-  { name: "Learn", summary: "Training and product education." },
-  { name: "Earn", summary: "Production planning and documented compensation mechanics." },
-  { name: "Team", summary: "Agent support and leadership activity." },
-  { name: "Account", summary: "Profile and operating preferences." },
+  { name: "Capital", summary: "Planned partner-attributed public funding pages; still in development." },
+  { name: "Growth", summary: "Planned campaigns, tracking links, scripts, and distribution tools." },
+  { name: "Build", summary: "Planned launch guidance and agency development tools." },
+  { name: "Learn", summary: "Planned training and product education access." },
+  { name: "Earn", summary: "Planned production planning; current governing documents determine compensation." },
+  { name: "Team", summary: "Planned agent-support and leadership workflows." },
+  { name: "Account", summary: "Planned profile and operating preferences." },
 ] as const;
