@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { pages } from "@/content/pages";
-import { site } from "@/content/site";
+import { destinations } from "@/content/site";
 
 export const metadata: Metadata = { title: pages.apply.title, description: pages.apply.description, alternates: { canonical: "/apply" } };
 
@@ -18,7 +18,7 @@ export default async function ApplyPage({ searchParams }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const incoming = await searchParams;
-  const target = new URL(site.applicationFormUrl);
+  const target = new URL(destinations.application.current);
   for (const key of attributionKeys) {
     const value = incoming[key];
     if (typeof value === "string" && value.trim()) target.searchParams.set(key, value.trim());

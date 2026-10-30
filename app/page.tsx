@@ -7,7 +7,6 @@ import EconomicsPlanner from "@/components/EconomicsPlanner";
 import { ctas } from "@/content/ctas";
 import { home } from "@/content/pages/home";
 import { fundingFamilies, fundingCaveat } from "@/content/products";
-import { site } from "@/content/site";
 import { commandPrompts, systemModules } from "@/content/system";
 
 export const metadata: Metadata = {
@@ -86,9 +85,11 @@ export default function HomePage() {
           <div className="grid gap-7 lg:grid-cols-[.72fr_1.28fr]">
             <div><div className="command-label text-[#f5d90a]">{home.system.eyebrow}</div><h2 className="display-type mt-4 text-5xl sm:text-7xl">{home.system.title}</h2><p className="mt-5 max-w-sm text-sm leading-7 text-zinc-300">{home.system.body}</p><a href="/system" className="mt-6 inline-block command-label text-[#f5d90a] underline underline-offset-4">See the whole system ↗</a></div>
             <div className="divide-y divide-zinc-600 border-y border-zinc-600">
-              {systemModules.slice(0, 6).map((module) => <a key={module.number} href={module.destination || "/system"} className="module-row grid grid-cols-[3rem_1fr] gap-3 py-4 no-underline sm:grid-cols-[4rem_.7fr_1.3fr] sm:gap-5">
-                <span className="command-label text-[#f5d90a]">{module.number}</span><span className="text-lg font-black uppercase">{module.name}</span><span className="hidden text-sm leading-6 text-zinc-300 sm:block">{module.summary}</span>
-              </a>)}
+              {systemModules.slice(0, 6).map((module) => {
+                const row = <><span className="command-label text-[#f5d90a]">{module.number}</span><span className="text-lg font-black uppercase">{module.name}</span><span className="hidden text-sm leading-6 text-zinc-300 sm:block">{module.summary}</span></>;
+                const rowClass = "module-row grid grid-cols-[3rem_1fr] gap-3 py-4 no-underline sm:grid-cols-[4rem_.7fr_1.3fr] sm:gap-5";
+                return module.destination ? <a key={module.number} href={module.destination} className={rowClass}>{row}</a> : <div key={module.number} className={rowClass}>{row}</div>;
+              })}
             </div>
           </div>
         </Container>
@@ -97,7 +98,7 @@ export default function HomePage() {
       <section className="py-12 sm:py-16">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
-            <div><div className="command-label">{home.command.eyebrow}</div><h2 className="display-type mt-4 text-5xl sm:text-7xl">{home.command.title}</h2><p className="mt-5 max-w-lg text-sm leading-7">{home.command.body}</p><a href={site.partnerCommandUrl} className="mt-6 inline-block border-b-2 border-black pb-1 text-xs font-black uppercase">Open Partner Command ↗</a></div>
+            <div><div className="command-label">{home.command.eyebrow}</div><h2 className="display-type mt-4 text-5xl sm:text-7xl">{home.command.title}</h2><p className="mt-5 max-w-lg text-sm leading-7">{home.command.body}</p><a href={ctas.partnerCommand.href} className="mt-6 inline-block border-b-2 border-black pb-1 text-xs font-black uppercase">{ctas.partnerCommand.label} ↗</a></div>
             <div className="command-showcase border-2 border-black bg-[#f2eedf] shadow-[7px_7px_0_#f5d90a]">
               <div className="flex items-center justify-between border-b-2 border-black bg-[#f5d90a] px-4 py-3"><span className="command-label">Partner Command / Workspace</span><span className="flex gap-1.5" aria-hidden="true"><i className="h-2.5 w-2.5 rounded-full border border-black"/><i className="h-2.5 w-2.5 rounded-full border border-black"/><i className="h-2.5 w-2.5 rounded-full border border-black"/></span></div>
               <div className="grid sm:grid-cols-[8rem_1fr]">
