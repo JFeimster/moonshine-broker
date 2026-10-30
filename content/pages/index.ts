@@ -101,7 +101,7 @@ export const pages = {
     eyebrow: "Launch sequence",
     intro: "The first month is about learning the workflow and beginning consistent business development. Use the milestones as a working sequence and adapt them to your experience and schedule.",
     sections: [
-      { eyebrow: "Day 1", title: "Set up your working identity", items: ["Complete the approved application and onboarding steps", "Confirm your profile and public funding-page details", "Open Partner Command and locate the main workflows", "Save your attribution links and approved materials"] },
+      { eyebrow: "Day 1", title: "Set up your working identity", items: ["Complete the approved application and onboarding steps", "Confirm your profile and public funding-page details", "Explore the Partner Command overview in the Agency system", "Save your attribution links and approved materials"] },
       { eyebrow: "Week 1", title: "Learn the fundamentals", items: ["Review getting-started and product training", "Understand the client and provider process", "Review the current compensation plan", "Choose a market or audience and write a simple Game Plan"] },
       { eyebrow: "Week 2", title: "Begin conversations", body: "Reach out to your warm network, owner-serving professionals, and chosen audience. Practice listening for a real capital need and explaining a next step clearly." },
       { eyebrow: "Week 3", title: "Create a follow-up pipeline", body: "Track conversations, client questions, introductions, applications, pending actions, and dates to reconnect. Follow through on what you told people you would do." },

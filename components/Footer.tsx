@@ -1,5 +1,6 @@
 import Container from "@/components/Container";
-import { site } from "@/content/site";
+import { destinations } from "@/content/site";
+import { ctas } from "@/content/ctas";
 
 export default function Footer() {
   return <footer className="border-t-2 border-black bg-black py-10 text-[#f2eedf]">
@@ -15,7 +16,11 @@ export default function Footer() {
         </div>
       </div>
       <div className="mt-8 flex flex-wrap gap-x-5 gap-y-3 border-t border-zinc-700 pt-6 text-xs uppercase tracking-wider text-zinc-400">
-        <a href={site.brokersUrl}>Broker education</a><a href={site.toolsUrl}>Public tools</a><a href={site.capitalPageUrl}>Funding pages</a><a href={site.partnerCommandUrl}>Partner Command</a><span>© {new Date().getFullYear()} Moonshine Capital</span>
+        <a href={destinations.brokerEducation.current}>Broker education</a>
+        <a href={destinations.publicTools.current}>Public tools</a>
+        <a href={destinations.publicFundingInfo.current}>Public funding options</a>
+        <a href={ctas.partnerCommand.href}>{ctas.partnerCommand.label}</a>
+        <span>© {new Date().getFullYear()} Moonshine Capital</span>
       </div>
     </Container>
   </footer>;
