@@ -4,30 +4,15 @@ import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { pages } from "@/content/pages";
-import { destinations } from "@/content/site";
+import { applicationTarget } from "@/lib/attribution";
 
 export const metadata: Metadata = { title: pages.apply.title, description: pages.apply.description, alternates: { canonical: "/apply" } };
-
-const attributionKeys = [
-  "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
-  "ref", "referral_code", "source", "campaign", "partner_id", "partner_slug",
-  "gclid", "fbclid", "msclkid",
-] as const;
 
 export default async function ApplyPage({ searchParams }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const incoming = await searchParams;
-  const target = new URL(destinations.application.current);
-  for (const key of attributionKeys) {
-    const value = incoming[key];
-    if (typeof value === "string" && value.trim()) target.searchParams.set(key, value.trim());
-  }
-  if (!target.searchParams.has("utm_source")) target.searchParams.set("utm_source", "agency");
-  if (!target.searchParams.has("utm_medium")) target.searchParams.set("utm_medium", "website");
-  if (!target.searchParams.has("utm_campaign")) target.searchParams.set("utm_campaign", "agency_property");
-  if (!target.searchParams.has("source")) target.searchParams.set("source", "agency");
-  if (!target.searchParams.has("campaign")) target.searchParams.set("campaign", "agency_property");
+  const target = applicationTarget(incoming);
 
   return <>
     <Header />
