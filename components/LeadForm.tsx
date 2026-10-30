@@ -37,8 +37,8 @@ export default function LeadForm() {
       }
 
       window.location.href = "/thanks";
-    } catch (err: any) {
-      setError(err.message || "Error.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Error.");
     } finally {
       setLoading(false);
     }
