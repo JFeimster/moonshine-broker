@@ -115,8 +115,8 @@ test("launch pack includes chosen market, channel, referral, discovery, month pl
   assert.match(pack, /\[Funding categories\]\(\/products\)/);
 });
 
-test("sitemap preserves existing public routes and includes all six toolkit utilities", () => {
+test("sitemap preserves existing public routes and includes toolkit and growth utilities", () => {
   const routes = sitemap().map((item) => new URL(item.url).pathname);
   for (const existing of ["/", "/start", "/get-clients", "/products", "/how-it-works", "/apply"]) assert.ok(routes.includes(existing));
-  for (const toolkit of ["/toolkit", "/toolkit/outreach", "/toolkit/referrals", "/toolkit/discovery", "/toolkit/marketing", "/toolkit/academy", "/toolkit/launch-pack"]) assert.ok(routes.includes(toolkit));
+  for (const toolkit of ["/toolkit", "/toolkit/outreach", "/toolkit/referrals", "/toolkit/discovery", "/toolkit/marketing", "/toolkit/academy", "/toolkit/launch-pack", "/toolkit/growth", "/toolkit/growth/campaigns", "/toolkit/growth/referral-kits", "/toolkit/growth/brand-studio", "/toolkit/growth/distribution", "/toolkit/growth/activity"]) assert.ok(routes.includes(toolkit));
 });
