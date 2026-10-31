@@ -14,6 +14,7 @@ export default function ProductMatrix() {
         </table>
       </div>
       <p className="mt-4 text-xs leading-6">{fundingCaveat}</p>
+      <a href="/toolkit/discovery" className="mt-4 inline-block border-b-2 border-black pb-1 text-xs font-black uppercase">Open the guided discovery workbench ↗</a>
     </div>
   </section>;
 }

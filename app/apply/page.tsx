@@ -29,6 +29,7 @@ export default async function ApplyPage({ searchParams }: {
                 <Button href="/how-it-works" variant="secondary">Review How It Works</Button>
               </div>
               <p className="mt-4 text-xs font-semibold uppercase tracking-wide">Opens our existing secure Tally application</p>
+              <a href="/toolkit" className="mt-4 inline-block text-xs font-black uppercase underline underline-offset-4">Prepare with the public Agency Toolkit ↗</a>
             </div>
             <aside className="border-2 border-black bg-[#f2eedf] p-6 shadow-[6px_6px_0_#000] sm:p-8">
               <div className="command-label">Before you apply</div>
