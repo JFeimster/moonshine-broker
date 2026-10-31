@@ -6,6 +6,7 @@ export const navigation = [
   { label: "System", href: "/system" },
   { label: "Products", href: "/products" },
   { label: "First 30 Days", href: "/start" },
+  { label: "Toolkit", href: "/toolkit" },
   { label: "Compensation", href: "/compensation" },
   { label: "Build", href: "/build" },
   { label: "FAQ", href: "/faq" },

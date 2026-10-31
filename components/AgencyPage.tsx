@@ -20,6 +20,7 @@ export default function AgencyPage({ content, children }: { content: AgencyPageC
                 <Button href={content.nextAction.href}>{content.nextAction.label}</Button>
                 <Button href="/how-it-works" variant="secondary">How It Works</Button>
               </div>
+              <a href="/toolkit" className="mt-5 inline-block text-xs font-black uppercase underline underline-offset-4">Use the Agency Toolkit ↗</a>
             </div>
             <div className="hidden border-l-2 border-black pl-5 lg:block">
               <div className="command-label">Moonshine Capital</div>

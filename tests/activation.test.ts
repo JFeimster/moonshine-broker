@@ -5,6 +5,8 @@ import { launchWeeks, thirtyDayPlan } from "../content/launch";
 import { ctas } from "../content/ctas";
 import { destinations } from "../content/site";
 import { applicationTarget, captureAttribution, pickAttribution } from "../lib/attribution";
+import { buildDiscoverySummary, buildLaunchPack, generateMarketingAsset, generateOutreach, generateReferralSequence, mapDiscoveryCategories } from "../lib/toolkit";
+import sitemap from "../app/sitemap";
 
 const answers = (value: number): Answers => Object.fromEntries(questions.map(({ key }) => [key, value]));
 
@@ -56,4 +58,65 @@ test("Tally attribution retains supported identifiers and rejects unrelated quer
   assert.equal(applicationTarget({}).searchParams.get("utm_source"), "agency");
   assert.equal(captureAttribution(new URLSearchParams("utm_source=new"), new URLSearchParams("utm_source=old&gclid=stale")).toString(), "utm_source=new");
   assert.equal(captureAttribution(new URLSearchParams(), new URLSearchParams("utm_source=old&gclid=click")).toString(), "utm_source=old&gclid=click");
+});
+
+test("outreach templates adapt to audience, objective, tone, and channel", () => {
+  const owner = generateOutreach({ audience: "Business owner", objective: "Initial introduction", tone: "Warm", channel: "Email", name: "Morgan", business: "Northstar HVAC", context: "replacing service vehicles" });
+  const partner = generateOutreach({ audience: "Referral partner introduction", objective: "Initial introduction", tone: "Direct", channel: "LinkedIn", name: "Morgan", context: "equipment planning" });
+  assert.match(owner, /Subject:/);
+  assert.match(owner, /Northstar HVAC/);
+  assert.match(owner, /provider determines availability/);
+  assert.match(generateOutreach({ audience: "Business owner", objective: "Follow-up", tone: "Direct", channel: "Email", context: "the equipment quote" }), /following up as agreed/);
+  assert.match(partner, /permission-based introduction/);
+  assert.doesNotMatch(generateOutreach({ audience: "Business owner", objective: "Appointment reminder", tone: "Warm", channel: "SMS", name: "Morgan", context: "our planning call" }), /Subject:/);
+  assert.match(generateOutreach({ audience: "Business owner", objective: "Responsible objection handling", tone: "Educational", channel: "Voicemail", context: "timing concerns" }), /provider determines terms/);
+});
+
+test("referral profiles and follow-up sequences vary by profession and preserve consent boundaries", () => {
+  const accountant = generateReferralSequence("accountant", "Jordan");
+  const dealer = generateReferralSequence("equipment", "Jordan");
+  assert.match(accountant, /tax and accounting advice/);
+  assert.match(dealer, /equipment purchase/);
+  assert.notEqual(accountant, dealer);
+  assert.match(accountant, /permission/);
+  assert.match(accountant, /Do not imply a referral fee/);
+});
+
+test("discovery mapping returns educational categories and a safe conversation summary", () => {
+  assert.deepEqual(mapDiscoveryCategories({ objective: "Replace a truck", use: "Equipment and vehicle purchase" }).map((item) => item.name), ["Equipment Financing"]);
+  assert.deepEqual(mapDiscoveryCategories({ objective: "Buy an existing business", use: "Acquisition" }).map((item) => item.name), ["Acquisition Financing"]);
+  assert.deepEqual(mapDiscoveryCategories({ objective: "Plan ahead", use: "Unclear" }).map((item) => item.name), ["Credit + Capital Strategy"]);
+  const summary = buildDiscoverySummary({ industry: "Construction", objective: "Growth", use: "Purchase equipment", timeline: "60 days", amount: "$50k–$100k", context: "Seasonal operations" });
+  assert.match(summary, /CATEGORIES TO INVESTIGATE/);
+  assert.match(summary, /What asset is being acquired/);
+  assert.match(summary, /invoice, asset details/);
+  assert.match(summary, /Do not include SSNs, bank credentials/);
+  assert.doesNotMatch(summary, /approval odds|eligible/);
+});
+
+test("marketing assets use selected channel and avoid guarantees or unsupported rates", () => {
+  const linkedin = generateMarketingAsset({ audience: "Retail owners", problem: "seasonal inventory", channel: "LinkedIn", objective: "Educate", tone: "Educational", destination: "Read the guide" });
+  const referral = generateMarketingAsset({ audience: "CPAs", problem: "client expansion plans", channel: "Referral campaign", objective: "Invite a referral", tone: "Warm", destination: "Start a conversation" });
+  assert.match(linkedin, /#SmallBusiness/);
+  assert.match(linkedin, /providers determine availability/);
+  assert.match(generateMarketingAsset({ audience: "Retail owners", problem: "inventory planning", channel: "Educational caption", objective: "Educate", tone: "Educational", destination: "Review the guide" }), /Clarify the goal, use, and timing/);
+  assert.match(referral, /Touch 1 — Introduce/);
+  assert.match(referral, /permission/);
+  assert.doesNotMatch(`${linkedin} ${referral}`, /guaranteed rate|approved today|guaranteed funding/i);
+});
+
+test("launch pack includes chosen market, channel, referral, discovery, month plan, and canonical apply route", () => {
+  const pack = buildLaunchPack({ market: "Construction and trades", channels: ["Owner referrals", "LinkedIn"], professionId: "equipment" });
+  assert.match(pack, /Construction and trades/);
+  assert.match(pack, /Owner referrals, LinkedIn/);
+  assert.match(pack, /Equipment dealers/);
+  assert.match(pack, /30-day execution plan/);
+  assert.match(pack, /tally\.so\/r\/rjM6do/);
+  assert.match(pack, /\[Funding categories\]\(\/products\)/);
+});
+
+test("sitemap preserves existing public routes and includes all six toolkit utilities", () => {
+  const routes = sitemap().map((item) => new URL(item.url).pathname);
+  for (const existing of ["/", "/start", "/get-clients", "/products", "/how-it-works", "/apply"]) assert.ok(routes.includes(existing));
+  for (const toolkit of ["/toolkit", "/toolkit/outreach", "/toolkit/referrals", "/toolkit/discovery", "/toolkit/marketing", "/toolkit/academy", "/toolkit/launch-pack"]) assert.ok(routes.includes(toolkit));
 });
