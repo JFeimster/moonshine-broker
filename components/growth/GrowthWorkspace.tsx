@@ -5,7 +5,9 @@ import Image from "next/image";
 import Container from "@/components/Container";
 import { customerMarkets, referralProfessions } from "@/content/toolkit";
 import { growthResources } from "@/content/growth-resources";
+import { destinations } from "@/content/site";
 import { buildActivityPlan, buildCampaign, buildGrowthPack, buildPromoSvg, buildReferralKit, campaignChannels, campaignObjectives, campaignStructures, defaultGrowthConfig, makeTrackedResourceUrl, resolveBrandCta, type GrowthConfig } from "@/lib/growth";
+import { createCampaignHandoff, isCampaignHandoff, isGrowthConfig } from "@/lib/campaign-handoff";
 
 type View = "hub" | "campaigns" | "referral-kits" | "brand-studio" | "distribution" | "activity";
 const nav: { id: View; title: string; href: string }[] = [
@@ -38,6 +40,7 @@ export default function GrowthWorkspace({ view = "hub" }: { view?: View }) {
   const [config, setConfig] = useState<GrowthConfig>(defaultGrowthConfig);
   const [campaignDraft, setCampaignDraft] = useState("");
   const [kitDraft, setKitDraft] = useState("");
+  const [activityDraft, setActivityDraft] = useState("");
   const [brandDraft, setBrandDraft] = useState("");
   const [handoutDraft, setHandoutDraft] = useState("");
   const [referralSheetDraft, setReferralSheetDraft] = useState("");
@@ -69,7 +72,7 @@ export default function GrowthWorkspace({ view = "hub" }: { view?: View }) {
   }, []);
   useEffect(() => { try { sessionStorage.setItem("moonshine-growth-config-v1", JSON.stringify(config)); } catch { /* browser storage may be unavailable */ } }, [config]);
 
-  function update(patch: Partial<GrowthConfig>) { setConfig((current) => ({ ...current, ...patch })); }
+  function update(patch: Partial<GrowthConfig>) { setConfig((current) => ({ ...current, ...patch })); setActivityDraft(""); }
   function selectPlanningMode(mode: GrowthConfig["mode"]) {
     const preset = mode === "Part-time agent" ? { hours: 5, sessions: 3, conversations: 5, followUps: 5, relationships: 2 } : mode === "Consistent weekly operator" ? { hours: 10, sessions: 5, conversations: 10, followUps: 10, relationships: 3 } : { hours: 25, sessions: 5, conversations: 20, followUps: 20, relationships: 5 };
     update({ mode, ...preset });
@@ -86,7 +89,8 @@ export default function GrowthWorkspace({ view = "hub" }: { view?: View }) {
   const campaign = campaignDraft || `# ${generatedCampaign.name}\n\nObjective: ${generatedCampaign.objective}\nAudience: ${generatedCampaign.audience}\n\n## Positioning\n${generatedCampaign.value}\n\n## Outreach sequence\n${generatedCampaign.messages.map((item) => `\n### Touch ${item.step} — ${item.channel} — ${item.interval}\n\n${item.body}`).join("\n")}\n\n## CTA\n${generatedCampaign.destination.label}: ${generatedCampaign.destination.url}\n\n## Educational post\n${generatedCampaign.marketing}\n\n## Checklist\n- [ ] Verify the audience and each placeholder\n- [ ] Confirm channel rules and permission\n- [ ] Send only appropriate, welcomed outreach\n- [ ] Record agreed follow-up in your existing workflow`;
   const brandCta = resolveBrandCta(cta, config.objective);
   const referralKit = kitDraft || generatedKit;
-  const activity = useMemo(() => buildActivityPlan(config), [config]);
+  const generatedActivity = useMemo(() => buildActivityPlan(config), [config]);
+  const activity = activityDraft || generatedActivity;
   const filteredResources = growthResources.filter((item) => `${item.title} ${item.description} ${item.problem} ${item.category}`.toLowerCase().includes(resourceSearch.toLowerCase()) && (problemFilter === "All problems" || item.problem === problemFilter));
   const selectedResources = growthResources.filter((item) => config.resourceIds.includes(item.id));
   const campaignName = generatedCampaign.name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
@@ -104,15 +108,36 @@ export default function GrowthWorkspace({ view = "hub" }: { view?: View }) {
   const promoOutput = promoDraft || promoText;
   const builtBrand = brandDraft || ["# Business funding education draft", "", handoutOutput, "", "## Referral introduction sheet", referralSheetOutput, "", "## Social media graphic text", `${config.audience}\n\n${topic}\n\nProvider terms and decisions vary.`, "", "## Event invitation", eventOutput, "", "## Email signature CTA", signatureOutput, "", "## Shareable text card", promoOutput].join("\n");
   const pack = buildGrowthPack(config, campaign, referralKit, builtBrand, config.resourceIds, activity);
+  const handoff = createCampaignHandoff({
+    config,
+    campaign: generatedCampaign,
+    resources: selectedResources.map(({ id, title, url }) => ({ id, title, url: new URL(url, "https://moonshine-broker.vercel.app").toString() })),
+    outreach: campaign,
+    referralKit,
+    marketing: builtBrand,
+    activityPlan: activity,
+  });
 
   function toggleChannel(value: string) { update({ channels: config.channels.includes(value) ? config.channels.filter((item) => item !== value) : [...config.channels, value] }); }
   function toggleResource(id: string) { update({ resourceIds: config.resourceIds.includes(id) ? config.resourceIds.filter((item) => item !== id) : [...config.resourceIds, id] }); }
   async function importConfig(file?: File) {
     if (!file) return;
     try {
-      const parsed = JSON.parse(await file.text()) as Partial<GrowthConfig>;
-      update({ ...defaultGrowthConfig, ...parsed, channels: Array.isArray(parsed.channels) ? parsed.channels.filter((v): v is string => typeof v === "string" && campaignChannels.includes(v as typeof campaignChannels[number])) : defaultGrowthConfig.channels, resourceIds: Array.isArray(parsed.resourceIds) ? parsed.resourceIds.filter((v): v is string => typeof v === "string" && growthResources.some((r) => r.id === v)) : defaultGrowthConfig.resourceIds });
-      setMessage("Configuration imported in this browser.");
+      if (file.size > 256_000) throw new Error("size");
+      const parsed: unknown = JSON.parse(await file.text());
+      if (isCampaignHandoff(parsed)) {
+        update(parsed.campaign.config);
+        setCampaignDraft(parsed.campaign.assets.outreach);
+        setKitDraft(parsed.campaign.assets.referralKit);
+        setBrandDraft(parsed.campaign.assets.marketing);
+        setActivityDraft(parsed.campaign.assets.activityPlan);
+        setMessage("Version 1 campaign imported locally. Partner identity and referral attribution remain unassigned.");
+      } else if (isGrowthConfig(parsed)) {
+        update({ ...defaultGrowthConfig, ...parsed, resourceIds: parsed.resourceIds.filter((id) => growthResources.some((resource) => resource.id === id)) });
+        setMessage("Configuration imported in this browser.");
+      } else {
+        throw new Error("schema");
+      }
     } catch { setMessage("That file is not a valid campaign configuration JSON."); }
   }
   const printHtml = `<!doctype html><html><head><meta charset="utf-8"><title>Growth Campaign Assets</title><style>body{font:16px/1.6 Arial,sans-serif;max-width:800px;margin:40px auto;color:#111}h1,h2{font-weight:800;text-transform:uppercase}section{page-break-after:always;border:3px solid #111;padding:32px;margin:24px 0}.notice{background:#f5d90a;padding:12px}</style></head><body><div class="notice">Independent agent marketing draft. Not an officially approved Moonshine Capital asset.</div><section><h1>Funding education</h1><pre>${handoutOutput.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre></section><section><h1>Referral resource</h1><pre>${referralSheetOutput.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre></section><section><h1>Social media</h1>${socialCard}</section><section><h1>Educational session</h1><pre>${eventOutput.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre></section></body></html>`;
@@ -134,7 +159,7 @@ export default function GrowthWorkspace({ view = "hub" }: { view?: View }) {
 
       {(view === "hub" || view === "activity") && <section id="activity" className="grid gap-6 border-b-2 border-black py-8 lg:grid-cols-[0.7fr_1.3fr]"><div><p className="command-label">Step 06 / Plan execution</p><h2 className="mt-2 text-3xl font-black uppercase">A schedule that fits the week.</h2><div className="mt-4 grid gap-3 sm:grid-cols-2"><Select title="Planning mode" value={config.mode} values={["Part-time agent", "Consistent weekly operator", "Full-time agency builder"]} onChange={(v) => selectPlanningMode(v as GrowthConfig["mode"])}/><Input title="Hours per week" type="number" value={config.hours} onChange={(v) => update({ hours: Number(v) })}/><Input title="Prospecting sessions" type="number" value={config.sessions} onChange={(v) => update({ sessions: Number(v) })}/><Input title="Desired new conversations (activity target)" type="number" value={config.conversations} onChange={(v) => update({ conversations: Number(v) })}/><Input title="Follow-up capacity" type="number" value={config.followUps} onChange={(v) => update({ followUps: Number(v) })}/><Input title="Referral relationships" type="number" value={config.relationships} onChange={(v) => update({ relationships: Number(v) })}/><Input title="Plan duration (weeks)" type="number" value={config.durationWeeks} onChange={(v) => update({ durationWeeks: Number(v) })}/></div><p className="mt-2 text-xs text-zinc-600">Selecting a planning mode loads editable starting assumptions for time and activity.</p><div className="mt-4 flex flex-wrap gap-2"><ActionButton onClick={() => download("growth-activity-plan.md", activity)}>Download Markdown</ActionButton><ActionButton onClick={() => download("growth-task-schedule.csv", csv, "text/csv;charset=utf-8")}>Download CSV schedule</ActionButton></div></div><TextOutput title="Weekly plan and review template" value={activity} name="growth-activity-plan.md"/></section>}
 
-      {(view === "hub" || view === "campaigns") && <section id="export" className="border-b-2 border-black py-8"><p className="command-label">Step 07 / Export the unified campaign pack</p><h2 className="mt-2 text-3xl font-black uppercase">Ready for your existing workflows.</h2><p className="mt-2 max-w-3xl text-sm leading-6">The pack combines your current editable campaign, referral kit, asset copy, selected resources, activity plan, follow-up checklist, and handoff guidance. No contacts or personal campaign information enter the URL or a server.</p><div className="mt-4 flex flex-wrap gap-2"><ActionButton onClick={() => download("growth-campaign-pack.md", pack)}>Download Growth Campaign Pack</ActionButton><ActionButton onClick={async () => { await navigator.clipboard.writeText(pack); setMessage("Growth Campaign Pack copied."); }}>Copy entire pack</ActionButton></div><details className="mt-5"><summary className="cursor-pointer font-black uppercase">Preview full export</summary><pre className="mt-3 max-h-[32rem] overflow-auto whitespace-pre-wrap border-2 border-black bg-white p-4 text-xs leading-5">{pack}</pre></details><div className="mt-6 grid gap-4 sm:grid-cols-2"><article className={card}><p className="command-label">Partner Command</p><h3 className="mt-2 text-xl font-black uppercase">Public to authenticated handoff</h3><p className="mt-2 text-sm leading-6">Authenticated partner identity, referral links, attribution, CRM, and reporting remain in Partner Command. This workspace creates no identity or referral URL.</p><a className="mt-3 inline-block font-bold underline" href="/system">Open existing system overview ↗</a></article><article className={card}><p className="command-label">Source training</p><h3 className="mt-2 text-xl font-black uppercase">Keep learning</h3><a className="mt-3 inline-block font-bold underline" href="/toolkit/academy">Open Agent Field Academy ↗</a></article></div></section>}
+      {(view === "hub" || view === "campaigns") && <section id="export" className="border-b-2 border-black py-8"><p className="command-label">Step 07 / Export the unified campaign pack</p><h2 className="mt-2 text-3xl font-black uppercase">Ready for your existing workflows.</h2><p className="mt-2 max-w-3xl text-sm leading-6">The pack combines your current editable campaign, referral kit, asset copy, selected resources, activity plan, follow-up checklist, and handoff guidance. No contacts or personal campaign information enter the URL or a server.</p><div className="mt-4 flex flex-wrap gap-2"><ActionButton onClick={() => download("growth-campaign-pack.md", pack)}>Download Growth Campaign Pack</ActionButton><ActionButton onClick={() => download("moonshine-agency-campaign-v1.json", JSON.stringify(handoff, null, 2), "application/json;charset=utf-8")}>Export to Partner Command (JSON)</ActionButton><ActionButton onClick={async () => { await navigator.clipboard.writeText(pack); setMessage("Growth Campaign Pack copied."); }}>Copy entire pack</ActionButton></div><p className="mt-3 max-w-3xl text-xs leading-5 text-zinc-600">The JSON contains your campaign draft and chosen public resources. Partner identity is unassigned. Import it after signing in; no account, link, or activity record is created during import.</p><details className="mt-5"><summary className="cursor-pointer font-black uppercase">Preview full export</summary><pre className="mt-3 max-h-[32rem] overflow-auto whitespace-pre-wrap border-2 border-black bg-white p-4 text-xs leading-5">{pack}</pre></details><div className="mt-6 grid gap-4 sm:grid-cols-2"><article className={card}><p className="command-label">Partner Command</p><h3 className="mt-2 text-xl font-black uppercase">Public to authenticated handoff</h3><p className="mt-2 text-sm leading-6">Prospective agents can apply through the existing partner intake. Approved partners sign in there to verify access and select an assigned destination. This workspace creates no identity or referral URL.</p><a className="mt-3 inline-block font-bold underline" href={`${destinations.partnerCommand.current}/partner-access`}>Apply or learn about partner access ↗</a><a className="ml-4 inline-block font-bold underline" href={`${destinations.partnerCommand.current}/auth/login?next=%2Fdashboard%2Fgrowth%2Fimport`}>Sign in and import campaign ↗</a></article><article className={card}><p className="command-label">Source training</p><h3 className="mt-2 text-xl font-black uppercase">Keep learning</h3><a className="mt-3 inline-block font-bold underline" href="/toolkit/academy">Open Agent Field Academy ↗</a></article></div></section>}
       <p className="py-7 text-xs leading-6 text-zinc-600">Educational and marketing drafts only. Verify all placeholders, destination links, and channel requirements before use. No messages are sent, and no funding approval, terms, compensation, or outcome is promised.</p>
     </Container>
   </main>;

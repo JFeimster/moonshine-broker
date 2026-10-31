@@ -9,7 +9,7 @@ export type SystemModule = {
 
 export const systemModules: SystemModule[] = [
   { number: "01", name: "Funding Page", summary: "Partner-attributed client pages are part of the planned Capital layer and are still in development.", destination: destinations.capitalPages.current },
-  { number: "02", name: "Partner Command", summary: "Planned authenticated workspace for pipeline, follow-up, growth, production, learning, and team activity. App access is in development.", destination: destinations.partnerCommand.current },
+  { number: "02", name: "Partner Command", summary: "Authenticated workspace for approved partners to manage onboarding, profiles, referrals, assigned destinations, resources, and activity.", destination: `${destinations.partnerCommand.current}/auth/login` },
   { number: "03", name: "Product Desk", summary: "A guided way to understand funding solution families and move a client into the appropriate process.", destination: "/products" },
   { number: "04", name: "Growth Engine", summary: "Planned tracking links, campaign assets, scripts, and outreach tools to support conversations." },
   { number: "05", name: "Training", summary: "Planned getting-started guidance, product education, scripts, and practical operating routines." },
