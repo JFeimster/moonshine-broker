@@ -4,9 +4,9 @@ export const destinations = {
     future: "https://agency.distilledfunding.com",
   },
   partnerCommand: {
-    current: "/system",
+    current: "https://partner-command-center-rho.vercel.app",
     future: "https://app.distilledfunding.com",
-    available: false,
+    available: true,
   },
   capitalPages: {
     current: null,

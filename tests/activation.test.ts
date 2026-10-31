@@ -41,8 +41,8 @@ test("conversion destinations retain the canonical application and public comman
   assert.equal(ctas.readiness.href, "/start#agency-readiness");
   assert.equal(ctas.apply.href, "/apply");
   assert.equal(destinations.application.current, "https://tally.so/r/rjM6do");
-  assert.equal(ctas.partnerCommand.href, "/system");
-  assert.equal(destinations.partnerCommand.available, false);
+  assert.equal(ctas.partnerCommand.href, `${destinations.partnerCommand.current}/auth/login`);
+  assert.equal(destinations.partnerCommand.available, true);
   assert.equal(destinations.capitalPages.available, false);
 });
 

@@ -6,7 +6,7 @@ export const ctas = {
   howItWorks: { label: "See How the Agency Works", href: "/how-it-works" },
   readiness: { label: "Check My Agency Readiness", href: "/start#agency-readiness" },
   system: { label: "Explore the System", href: "/system" },
-  partnerCommand: { label: "Explore Partner Command", href: destinations.partnerCommand.current },
+  partnerCommand: { label: "Sign in to Partner Command", href: `${destinations.partnerCommand.current}/auth/login` },
   products: { label: "Explore Funding Paths", href: "/products" },
   clients: { label: "Build Your Pipeline", href: "/get-clients" },
   start: { label: "See the First 30 Days", href: "/start" },
